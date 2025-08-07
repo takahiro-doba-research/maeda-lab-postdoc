@@ -9,7 +9,7 @@ This repository is organized into three directories:
 - experiment
 - machine-learning
 
-Each directories includes a README file with additional information.
+Each directory includes a README file with additional information.
 The code has been modified from its initial version, while maintaining the core functionality.
 It has only been tested in the computer environment listed below and may require minor adjustments to run on other systems.
 
