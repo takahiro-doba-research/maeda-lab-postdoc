@@ -42,7 +42,7 @@ cj.add_note(note_path)
 sub_folders = ["arene", "alkene", "PG", "backbone", "pyridone"]
 cj.make_conformer(sub_folders)
 ``` 
-The information on how the substituents should be connected is provided using the `add_note()` function before calling `make_conformer()`. This information is indicated by placing a sequence `fragment number, atom1, atom2` to the right of the coordinate of atom0 for both separated EQs and substituents. The fragment number links the parts of the separated EQ to be swapped with a substituent, while the three atoms (atom0, atom1, and atom2) from both the separated EQ and substituent define the planes used to determine the dihedral angle between them. When generating multiple conformers, a sequence `fragment number, atom1, atom2, step` is provided. This generates conformers with dihedral angles of 0°, 360°/step, 360°/step * 2, ..., 360°/step * (step - 1).
+The information on how the substituents should be connected is provided using the `add_note()` function before calling `make_conformer()`. This information is indicated by placing a sequence `fragment atom1 atom2` to the right of the coordinate of atom0 for both separated EQs and substituents. The fragment number links the parts of the separated EQ to be swapped with a substituent, while the three atoms (atom0, atom1, and atom2) from both the separated EQ and substituent define the planes used to determine the dihedral angle between them. When generating multiple conformers, a sequence `fragment atom1 atom2 step` is provided. This generates conformers with dihedral angles of 0°, 360°/step, 360°/step * 2, ..., 360°/step * (step - 1).
 ```bash
 Pd    -4.626032566819    -1.815194844416     0.391845605436 0
 C     -2.979682622253     0.356034409536    -0.178373879507 0
