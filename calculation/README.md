@@ -16,20 +16,18 @@ eq_list_path = "td_c1_193_SCAFIR6_EQ_list.log"
 eq_list = cf.read_eq_list(f"{wd}/{eq_list_path}")
 eq_list.save_eqs(wd)
 ```
-The `SeparationJob` can be instantiated, and the `separate()` function separates all EQs into fragments based on their bond connectivity matrices. The mappings between EQs, separated EQs, and separated groups are exported to `separated_EQ.csv` and `separated_group.csv`. The file `separated_group_info.csv` contains information about the bond connectivity.
+The `SeparationJob` can be instantiated, and the `separate()` function separates all EQs into fragments based on their bond connectivity matrices. All separated EQs are saved in a folder named "separated_group" and numbered sequentially during this process. The mappings between EQs, separated EQs, and separated groups are exported to `separated_EQ.csv` and `separated_group.csv`. The file `separated_group_info.csv` contains information about the bond connectivity.
 ```python
 sj = jc.SeparationJob(wd)
 eq_folder = "EQ"
 sj.separate(eq_folder)
 ```
-
-
+Using the files `SP_separation.com` and `MIN_separation.com`, which contain the calculation setups for single-point energy calculation and geometry optimization, respectively, the optimize() function submits multiple calculations to a server. The single-point calculation is skipped when a separated group contains only one separated EQ. The `analyze()` function produces a summary of the calculations.
 ```python
 sp_separation_path = "SP_separation.com"
 min_separation_path = "MIN_separation.com"
 sj.optimize(56, 24, sp_separation_path, min_separation_path)
-sj.summary()
-sj.make_template()
+sj.analyze()
 ```
 
 
