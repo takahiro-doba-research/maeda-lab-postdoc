@@ -16,7 +16,7 @@ It has only been tested in the computer environment listed below and may require
 ## Requirements
 - GRRM23 developmental version
 - Gaussian 16
-- python 3.8.2
+- Python 3.8.2
 - jupyterlab 3.4.3
 - networkx 2.8.2
 - numpy 1.23.5
