@@ -1,1 +1,7 @@
+.*
+!.gitignore
+!.github/
+
+.ipynb_checkpoints/
+
 .DS_Store
