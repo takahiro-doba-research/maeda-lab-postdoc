@@ -1,10 +1,10 @@
 # Calculation — SC-AFIR Reaction Path Analysis and Energy Descriptor Generation
 
-This directory contains all input/output files and analysis notebooks for SC-AFIR (Stochastic Conformer search with Artificial Force Induced Reaction) calculations of a Pd-catalyzed C–H functionalization reaction, as well as the automated workflow for generating energy descriptors across the full combinatorial library of MPAA–pyridone combinations.
+This directory contains all input/output files and analysis notebooks for SC-AFIR calculations of a Pd-catalyzed C–H functionalization reaction, as well as the automated workflow for generating energy descriptors across the full combinatorial library of MPAA–pyridone combinations.
 
 ## Overview
 
-The reaction involves Pd-catalyzed C–H functionalization of an arene using a pyridone directing group and an MPAA (monophosphine amino acid) ligand as catalyst. The overall reaction pathway proceeds through six key intermediates:
+The reaction involves Pd-catalyzed C–H functionalization of an arene using a pyridone and an MPAA (mono-protected amino acid) as ligands. The overall reaction pathway proceeds through six key intermediates:
 
 | Step | Intermediate | Key EQ file |
 |------|-------------|-------------|
@@ -15,7 +15,7 @@ The reaction involves Pd-catalyzed C–H functionalization of an arene using a p
 | 4 | Carbopalladation complex | `EQ2150.com` |
 | 5 | Product complex | `EQ3196.com` |
 
-The EQ indices are those from the SC-AFIR search. Transition state structures connecting the intermediates are saved as `PT*.com` files.
+The EQ indices are those from the SC-AFIRx_EQ_list.log. Transition state structures connecting the intermediates are saved as `PT*.com` files.
 
 ## SC-AFIR Calculations (GRRM)
 
@@ -31,9 +31,9 @@ Six sequential SC-AFIR calculations were performed, each building on the previou
 | SCAFIR6 | `td_c1_193_SCAFIR6.com` | Continued from SCAFIR5 |
 
 Each calculation produces three output files:
-- `*_EQ_list.log` — list of equilibrium (EQ) structures with coordinates and energies
-- `*_PT_list.log` — list of path/transition (PT) structures
-- `*_sim.log` — simulation log
+- `*_EQ_list.log` — list of equilibrium structures with coordinates and energies
+- `*_PT_list.log` — list of approximate transition state structures
+- `*_sim.log` — populations and traffic volumes
 
 The Repath calculation (`td_c1_193_Repath1.com`) refines transition state paths using SCAFIR6 results as input, with its minimum path saved in `td_c1_193_Repath1_MinPATH.rrm`.
 
@@ -41,7 +41,7 @@ The Repath calculation (`td_c1_193_Repath1.com`) refines transition state paths 
 
 Each SCAFIR run has a corresponding notebook that uses the `grrmlib` library (`grrmlib==0.1.0`) to parse output files and extract key structures.
 
-| Notebook | Target intermediate | Filtering criteria (interatomic distances) |
+| Notebook | Target intermediate | Representative Filtering criteria (interatomic distances) |
 |----------|--------------------|--------------------------------------------|
 | `td_c1_193_SCAFIR.ipynb` | C–H activation complex | Pd–C(arene) < 2.25 Å |
 | `td_c1_193_SCAFIR2.ipynb` | Olefin coordination complex | Pd–C(alkene) in 2.10–2.60 Å |
@@ -77,7 +77,32 @@ The `ConnectionJob` in `jobcontroller` connects substituents from the following 
 | `backbone/` | MPAA catalyst variants | 8 structures (0–5, 19, 20) |
 | `pyridone/` | Pyridone directing groups | 13 structures (0–12) |
 
-Connection instructions are provided by `note.com`, which specifies fragment indices and three reference atoms (atom0, atom1, atom2) from both the separated EQ and substituent to define the alignment plane. When generating multiple conformers, a `step` parameter specifies the number of dihedral angle increments.
+The information on how the substituents should be connected is provided using the `add_note()` function before calling `make_conformer()`. This information is indicated by placing a sequence `fragment atom1 atom2` to the right of the coordinate of atom0 for both separated EQs and substituents. The fragment number links the parts of the separated EQ to be swapped with a substituent, while the three atoms (atom0, atom1, and atom2) from both the separated EQ and substituent define the planes used to determine the dihedral angle between them. When generating multiple conformers, a sequence `fragment atom1 atom2 step` is provided. This generates conformers with dihedral angles of 0°, 360°/step, 360°/step * 2, ..., 360°/step * (step - 1).
+```bash
+Pd    -4.626032566819    -1.815194844416     0.391845605436 0
+C     -2.979682622253     0.356034409536    -0.178373879507 0
+O     -4.254430313631     0.012001025782    -0.278971564617 0
+O     -2.605663344565     1.495671947896    -0.322729149645 0
+C     -1.952608672882    -0.803497899306     0.086379059431 0 14 16 3
+H     -1.326248445610    -0.500697618989     0.946218878146 0
+N     -2.721517176961    -1.994025841517     0.421125519527 0
+C     -2.661704302814    -3.061564955062     1.213032532607 0
+O     -3.793901979686    -3.620469961627     1.388646364695 0
+C     -1.414574301650    -3.597773395740     1.846856289818 0
+H     -1.011626421100    -4.417399317648     1.231097999856 0
+H     -0.638383130353    -2.827688294826     1.951406738999 0
+H     -1.674343221793    -4.011395910408     2.831407457874 0
+C     -1.038332670898    -0.992475405233    -1.167165243957 4
+H     -1.708124962268    -0.992739132318    -2.046042935092 4
+C     -0.051574454371     0.174544613179    -1.302796880425 4
+H      0.524020145769     0.075954573425    -2.236831646384 4
+H     -0.565583909098     1.143597047486    -1.304269193680 4
+H      0.669107441865     0.171657985402    -0.466406419822 4
+C     -0.287877131382    -2.328618254178    -1.159404190450 4
+H      0.406161254912    -2.396943060016    -0.304574229789 4
+H     -0.969802001740    -3.190929369059    -1.127105957038 4
+H      0.316776427347    -2.421345352354    -2.075270635976 4
+```
 
 The workflow is driven by `z_command.py`:
 
@@ -92,11 +117,11 @@ cj.optimize(56, "SP_connection.com", sp_option, "MIN_connection.com", min_option
 cj.analyze()
 ```
 
-Calculation templates: `SP_connection.com` (B3LYP/LanL2DZ single-point), `MIN_connection.com` (B3LYP/Def2SVP geometry optimization). Jobs are submitted to a compute cluster with 14 nodes × 24 cores.
+Calculation templates: `SP_connection.com` (B3LYP/LanL2DZ single-point), `MIN_connection.com` (B3LYP/Def2SVP geometry optimization).
 
 ## Energy Descriptors
 
-The final output `energy_descriptor.csv` (also used as `X.csv` in the machine-learning directory) contains the SCF energies (Hartree) for all 104 backbone–pyridone combinations across 52 reaction intermediates/transition states. The column names (0, 2, 3, 4, 6, 7, ..., 642) correspond to the EQ/PT indices from the SC-AFIR search.
+The final output `energy_descriptor.csv` (also used as `X.csv` in the machine-learning directory) contains the SCF energies (Hartree) for all 104 backbone–pyridone combinations across 52 reaction intermediates/transition states. The column names (0, 2, 3, 4, 6, 7, ..., 642) correspond to the group (intermediate) indices clustered by equivalent structures with `grrmlib.is_identical` from the SC-AFIR search.
 
 ## Project Structure
 
@@ -134,19 +159,19 @@ calculation/
 
 ## Environment
 
-Python 3.10 with the following key packages:
+Python 3.11 with the following key packages:
 
 - `grrmlib` 0.1.0 (GRRM output parsing and reaction path network analysis)
 - `networkx` 3.4.2 (shortest path search in reaction path network)
-- `cclib` 1.8.1 (quantum chemistry output parsing)
+- `cclib` 1.8.1 (Gaussian output parsing)
 - `polars` 1.19.0 / `pandas` 1.5.3
 - `numpy` 1.24.2
 - `scipy` 1.10.0
 - `jupyterlab` 4.0.10
 
 External software required (not included):
-- **GRRM** — for SC-AFIR and Repath calculations
-- **Gaussian** — for DFT geometry optimizations and single-point energy calculations
+- **GRRM** — for SC-AFIR calculations and geometry optimizations
+- **Gaussian** — for single-point energy calculations
 
 ### Running with Docker
 
@@ -154,7 +179,4 @@ External software required (not included):
 # Development (JupyterLab)
 docker compose -f docker-compose.dev.yml up
 # JupyterLab available at http://localhost:8888
-
-# Production (run connection workflow)
-docker compose -f docker-compose.prod.yml up
 ```
