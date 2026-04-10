@@ -30,7 +30,7 @@ This study was supported by JST-ERATO (grant number JPMJER1903) to S.M., JSPS KA
 
 ## `calculation/` — Quantum Chemical Calculations
 
-SC-AFIR (Stochastic Conformer-based AFIR) calculations using GRRM/ONIOM(B3LYP/LanL2DZ:UFF) to map the reaction path network of a Pd-catalyzed C–H functionalization reaction. The reaction involves a pyridone directing group and an MPAA (mono-protected amino acid) ligand.
+SC-AFIR calculations using GRRM/ONIOM(B3LYP/LanL2DZ:UFF) to map the reaction path network of a Pd-catalyzed C–H functionalization reaction. The reaction involves a pyridone and an MPAA (mono-protected amino acid) as ligands.
 
 ### Reaction pathway (6 key intermediates)
 
@@ -47,9 +47,9 @@ SC-AFIR (Stochastic Conformer-based AFIR) calculations using GRRM/ONIOM(B3LYP/La
 
 1. **SC-AFIR search** (6 sequential runs, `td_c1_193_SCAFIR*.com`): explores the potential energy surface and produces lists of equilibrium structures (`*_EQ_list.log`) and approximate transition states (`*_PT_list.log`).
 2. **Reaction path analysis** (`td_c1_193_SCAFIR*.ipynb`): filters EQs by interatomic distances using `grrmlib` to identify each intermediate; SCAFIR6 notebook builds the full reaction path network and extracts all key EQ/PT structures.
-3. **Repath** (`td_c1_193_Repath1.com`): refines transition state paths from the SCAFIR6 results.
-4. **Fragment separation**: splits each intermediate into fragments and reoptimizes (B3LYP/Def2SVP) with `jobcontroller.SeparationJob`.
-5. **Substituent connection**: connects 8 MPAA variants (`backbone/`) and 13 pyridone variants (`pyridone/`) combinatorially and reoptimizes with `jobcontroller.ConnectionJob`.
+3. **Repath** (`td_c1_193_Repath1.com`): refines reaction paths from the SCAFIR6 results.
+4. **Fragment separation**: splits each intermediate into fragments and reoptimizes (B3LYP/Def2SVP) with `jobcontroller.SeparationJob`. These functions are also implemented in `grrmlib.SeparationWorkflow`.
+5. **Substituent connection**: connects 8 MPAA variants (`backbone/`) and 13 pyridone variants (`pyridone/`) combinatorially and reoptimizes with `jobcontroller.ConnectionJob`. These functions are also implemented in `grrmlib.ConnectionWorkflow`.
 6. **Energy descriptors**: SCF energies for all 104 backbone–pyridone combinations across 52 intermediates are exported to `energy_descriptor.csv` (= `X.csv` used in machine learning).
 
 See [`calculation/README.md`](calculation/README.md) for details.
@@ -90,7 +90,7 @@ Linear regression models that predict the beta product yield (`beta_av`) from qu
 | Lasso Regression | `alpha` |
 | PLS (Partial Least Squares) | `n_components` |
 
-All models share the same framework: recursive feature elimination (RFE, from 52 down to 4 features) with nested leave-one-pyridone-out cross-validation. Ridge regression receives additional analysis including alternative data splits, a shuffled-label negative control, feature correlation analysis, and noise robustness testing.
+All models share the same framework: recursive feature elimination (RFE, from 52 down to 4 features) with nested leave-one-group-out cross-validation (LOGOCV). Ridge regression receives additional analysis including alternative data splits, a shuffled-label negative control, feature correlation analysis, and noise robustness testing.
 
 See [`machine-learning/README.md`](machine-learning/README.md) for details.
 
