@@ -1,6 +1,21 @@
-# Pd-Catalyzed C–H Functionalization: Computation, Experiment, and Machine Learning
+# maeda-lab-postdoc
 
-This repository contains the full data pipeline for a study on Pd-catalyzed C–H functionalization, from quantum chemical calculations and experimental screening to machine learning–based yield prediction.
+## Description
+
+This repository contains codes and data for the paper:  
+Doba, T.\*; Harabuchi, Y.; Nagata, Y.; Maeda, S.\* Construction of an Interpretable Regression Model for Yield Prediction and Mechanistic Elucidation Enabled by Automated Reaction Path Exploration. **2026**
+
+The repository covers the full data pipeline for Pd-catalyzed C–H functionalization, from quantum chemical calculations and experimental screening to machine learning–based yield prediction. The code has been modified from its initial version, while maintaining the core functionality. It has only been tested in the computer environment listed below and may require minor adjustments to run on other systems.
+
+## Author
+
+Takahiro Doba (Kyoto University)
+
+## Acknowledgments
+
+This study was supported by JST-ERATO (grant number JPMJER1903) to S.M., JSPS KAKENHI (grant number 22KJ0043) to T.D., and JSPS KAKENHI (grant number 23B203) to Y.N. and Y.H.
+
+---
 
 ## Repository Structure
 
