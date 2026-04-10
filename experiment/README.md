@@ -6,13 +6,13 @@ This project visualizes and tabulates experimental yield data from a reaction sc
 
 - **Raw data**: `combined.xlsx` — yield measurements for each backbone (MPAA) × pyridone combination
 - **Products measured**: alpha and beta regioisomers
-- **Dataset size**: 21 MPAA variants (backbone 0–20) × 13 pyridone variants (pyridone 0–12)
+- **Dataset size**: 8 MPAA variants (backbone 0–5,19,20) × 13 pyridone variants (pyridone 0–12)
 
 ## Data Structure (`combined.xlsx`)
 
 | Column | Description |
 |--------|-------------|
-| `backbone` | MPAA catalyst index (0–20) |
+| `backbone` | MPAA catalyst index (0–5,19,20) |
 | `pyridone` | Pyridone substrate index (0–12) |
 | `beta1` | Beta product yield, run 1 (%) |
 | `beta2` | Beta product yield, run 2 (%) |
@@ -37,7 +37,7 @@ Visualizes the yield landscape across the MPAA × pyridone matrix.
 | `001_yield_hist_pyridone.png` | Stacked histogram of beta yield distribution, colored by pyridone |
 | `001_yield_hist_MPAA.png` | Stacked histogram of beta yield distribution, colored by MPAA |
 
-All heatmaps display numerical values in each cell (white text for low values, black for high), with a color scale from jet colormap.
+All heatmaps display numerical values in each cell, with a color scale from jet colormap.
 
 ### `002_yield.ipynb` — Summary Tables
 
