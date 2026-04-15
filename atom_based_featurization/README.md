@@ -8,26 +8,26 @@ This project builds predictive models on 104 reaction data points (8 MPAA × 13 
 
 1. Featurizing molecules with xTB (semi-empirical quantum chemistry) and morfeus (steric/electronic descriptors)
 2. Training Ridge regression models with Recursive Feature Elimination (RFE)
-3. Evaluating models via Leave-One-Group-Out cross-validation in two settings: pyridone-based and backbone-based
+3. Evaluating models via Leave-One-Group-Out cross-validation in two settings: pyridone-based and MPAA-based
 4. Visualizing model coefficients to identify the most important features
 
 ## Directory Structure
 
 ```
 atom_based_featurization/
-├── backbone/          # Gaussian input files (*.com) for MPAA molecules
-├── pyridone/          # Gaussian input files (*.com) for pyridone molecules
-├── 000_dataset.ipynb  # Feature computation and dataset construction
-├── 001_fit.ipynb      # Model training (Leave-One-Pyridone-Out CV)
-├── 002_RMSE.ipynb     # RMSE evaluation and scatter plots (Pyridone CV)
-├── 003_coefs.ipynb    # Coefficient visualization (Pyridone CV)
-├── 004_fit_MPAA.ipynb # Model training (Leave-One-MPAA-Out CV)
-├── 005_RMSE_MPAA.ipynb# RMSE evaluation and scatter plots (MPAA CV)
-├── 006_coefs_MPAA.ipynb# Coefficient visualization (MPAA CV)
-├── dataset.parquet    # Combined dataset
+├── backbone/             # Gaussian input files (*.com) for MPAA molecules
+├── pyridone/             # Gaussian input files (*.com) for pyridone molecules
+├── 000_dataset.ipynb     # Feature computation and dataset construction
+├── 001_fit.ipynb         # Model training (Leave-One-Pyridone-Out CV)
+├── 002_RMSE.ipynb        # RMSE evaluation and scatter plots (Pyridone CV)
+├── 003_coefs.ipynb       # Coefficient visualization (Pyridone CV)
+├── 004_fit_MPAA.ipynb    # Model training (Leave-One-MPAA-Out CV)
+├── 005_RMSE_MPAA.ipynb   # RMSE evaluation and scatter plots (MPAA CV)
+├── 006_coefs_MPAA.ipynb  # Coefficient visualization (MPAA CV)
+├── dataset.parquet       # Combined dataset
 ├── features_backbone.parquet  # MPAA features
 ├── features_pyridone.parquet  # Pyridone features
-├── y.csv              # Target variable (MPAA, pyridone, beta_av)
+├── y.csv                 # Target variable (MPAA, pyridone, beta_av)
 ├── requirements.txt
 └── Dockerfile
 ```
@@ -126,10 +126,10 @@ See `requirements.txt` for exact versions.
 | `001_fit_train_val_preds.parquet` | Train/validation predictions (Pyridone CV) |
 | `001_fit_test_preds.parquet` | Test predictions (Pyridone CV) |
 | `001_fit_coefs.parquet` | Ridge coefficients at each RFE step (Pyridone CV) |
-| `004_fit_MPAA_*.parquet` | Same as above (Backbone CV) |
+| `004_fit_MPAA_*.parquet` | Same as above (MPAA CV) |
 | `002_RMSE_plot.png` | RMSE vs. number of features |
 | `002_RMSE_scatter_all.png` | Predicted vs. experimental yield (all data) |
 | `002_RMSE_scatter_each.png` | Predicted vs. experimental yield (per pyridone) |
 | `003_coefs_imshow.png` | Heatmap of model coefficients |
 | `003_coefs_bar.png` | Bar chart of mean ± std coefficients |
-| `005_*` / `006_*` | Equivalent plots for Backbone CV |
+| `005_*` / `006_*` | Equivalent plots for MPAA CV |
