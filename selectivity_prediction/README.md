@@ -53,13 +53,6 @@ This yields 40 scalar features per pyridone–MPAA pair.
 
 **Nested cross-validation:** Hyperparameter `alpha` is tuned by an inner leave-one-group-out loop at each RFE step; the outer loop evaluates generalization on the held-out group.
 
-### Cross-validation scenarios
-
-| Scenario | Outer CV split | Inner CV split | Optimal features | Train RMSE | Test RMSE |
-|---|---|---|---|---|---|
-| Pyridone-out | Leave one pyridone out | Leave one pyridone out | 29 | 0.315 | 0.431 |
-| MPAA-out | Leave one MPAA out | Leave one backbone out | 13 | 0.354 | 0.736 |
-
 ## Outputs
 
 | File | Description |
