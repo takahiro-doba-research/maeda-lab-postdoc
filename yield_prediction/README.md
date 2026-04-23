@@ -1,4 +1,4 @@
-# Machine Learning for Reaction Yield Prediction
+# Regression Model for Yield Prediction
 
 This project applies linear regression models to predict reaction yields from quantum-chemically computed energies of reaction intermediates.
 
@@ -84,7 +84,7 @@ After cross-validation, the Ridge model is refit on the entire dataset for inter
 ## Project Structure
 
 ```
-machine-learning/
+yield_prediction/
 ├── X.csv                    # Intermediate energies (features)
 ├── y.csv                    # Reaction yields (target)
 ├── dataset.ipynb            # Data preprocessing → dataset.parquet
