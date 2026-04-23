@@ -3,7 +3,7 @@
 ## Description
 
 This repository contains codes and data for the paper:  
-Doba, T.\*; Harabuchi, Y.; Nagata, Y.; Maeda, S.\* Construction of an Interpretable Regression Model for Yield Prediction and Mechanistic Elucidation Enabled by Automated Reaction Path Exploration. **2026**
+Doba, T.\*; Harabuchi, Y.; Nagata, Y.; Maeda, S.\* Construction of an Interpretable Regression Model for Yield Prediction and Mechanistic Insight Enabled by Automated Reaction Path Exploration. **2026**
 
 The repository covers the full data pipeline for Pd-catalyzed C–H functionalization, from quantum chemical calculations and experimental screening to linear regression–based yield prediction. The code has been modified from its initial version, while maintaining the core functionality. It has only been tested in the computer environment listed below and may require minor adjustments to run on other systems.
 
