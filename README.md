@@ -5,7 +5,7 @@
 This repository contains codes and data for the paper:  
 Doba, T.\*; Harabuchi, Y.; Nagata, Y.; Maeda, S.\* Construction of an Interpretable Regression Model for Yield Prediction and Mechanistic Elucidation Enabled by Automated Reaction Path Exploration. **2026**
 
-The repository covers the full data pipeline for Pd-catalyzed C–H functionalization, from quantum chemical calculations and experimental screening to machine learning–based yield prediction. The code has been modified from its initial version, while maintaining the core functionality. It has only been tested in the computer environment listed below and may require minor adjustments to run on other systems.
+The repository covers the full data pipeline for Pd-catalyzed C–H functionalization, from quantum chemical calculations and experimental screening to linear regression–based yield prediction. The code has been modified from its initial version, while maintaining the core functionality. It has only been tested in the computer environment listed below and may require minor adjustments to run on other systems.
 
 ## Author
 
@@ -23,7 +23,7 @@ This study was supported by JST-ERATO (grant number JPMJER1903) to S.M., JSPS KA
 .
 ├── calculation/       # SC-AFIR reaction path search and energy descriptor generation
 ├── experiment/        # Experimental yield data visualization and tabulation
-└── machine-learning/  # Linear regression models for yield prediction
+└── yield_prediction/  # Linear regression models for yield prediction
 ```
 
 ---
@@ -50,7 +50,7 @@ SC-AFIR calculations using GRRM/ONIOM(B3LYP/LanL2DZ:UFF) to map the reaction pat
 3. **Repath** (`td_c1_193_Repath1.com`): refines reaction paths from the SCAFIR6 results.
 4. **Fragment separation**: splits each intermediate into fragments and reoptimizes (B3LYP/Def2SVP) with `jobcontroller.SeparationJob`. These functions are also implemented in `grrmlib.SeparationWorkflow`.
 5. **Substituent connection**: connects 8 MPAA variants (`backbone/`) and 13 pyridone variants (`pyridone/`) combinatorially and reoptimizes with `jobcontroller.ConnectionJob`. These functions are also implemented in `grrmlib.ConnectionWorkflow`.
-6. **Energy descriptors**: SCF energies for all 104 backbone–pyridone combinations across 52 intermediates are exported to `energy_descriptor.csv` (= `X.csv` used in machine learning).
+6. **Energy descriptors**: SCF energies for all 104 backbone–pyridone combinations across 52 intermediates are exported to `energy_descriptor.csv` (= `X.csv` used in linear regression).
 
 See [`calculation/README.md`](calculation/README.md) for details.
 
@@ -73,7 +73,7 @@ See [`experiment/README.md`](experiment/README.md) for details.
 
 ---
 
-## `machine-learning/` — Yield Prediction Models
+## `yield_prediction/` — Yield Prediction Models
 
 Linear regression models that predict the beta product yield (`beta_av`) from quantum-chemically computed reaction intermediate energies.
 
@@ -92,7 +92,7 @@ Linear regression models that predict the beta product yield (`beta_av`) from qu
 
 All models share the same framework: recursive feature elimination (RFE, from 52 down to 4 features) with nested leave-one-group-out cross-validation (LOGOCV). Ridge regression receives additional analysis including alternative data splits, a shuffled-label negative control, feature correlation analysis, and noise robustness testing.
 
-See [`machine-learning/README.md`](machine-learning/README.md) for details.
+See [`yield_prediction/README.md`](yield_prediction/README.md) for details.
 
 ---
 
@@ -104,10 +104,10 @@ calculation/
       ↓
   Fragment separation & substituent connection
       ↓
-  energy_descriptor.csv ──────────────────────────────→ machine-learning/X.csv
+  energy_descriptor.csv ──────────────────────────────→ yield_prediction/X.csv
                                                                   ↓
 experiment/                                              Linear regression
-  combined.xlsx ──────────────────────────────────────→ machine-learning/y.csv
+  combined.xlsx ──────────────────────────────────────→ yield_prediction/y.csv
   (beta_av yield)                                                  ↓
                                                          Yield prediction model
 ```
@@ -120,4 +120,4 @@ Each subdirectory has its own `Dockerfile` and `docker-compose.dev.yml`. All thr
 docker compose -f docker-compose.dev.yml up
 ```
 
-All environments use Python 3.10–3.11 with `polars`, `numpy`, `matplotlib`, and `jupyterlab` as common dependencies. The `machine-learning/` environment additionally requires `scikit-learn`; the `calculation/` environment requires `grrmlib`, `networkx`, and `cclib`, as well as external **GRRM** and **Gaussian** installations.
+All environments use Python 3.10–3.11 with `polars`, `numpy`, `matplotlib`, and `jupyterlab` as common dependencies. The `yield_prediction/` environment additionally requires `scikit-learn`; the `calculation/` environment requires `grrmlib`, `networkx`, and `cclib`, as well as external **GRRM** and **Gaussian** installations.
