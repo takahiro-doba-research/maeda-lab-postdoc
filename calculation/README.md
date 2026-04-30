@@ -180,3 +180,6 @@ External software required (not included):
 docker compose -f docker-compose.dev.yml up
 # JupyterLab available at http://localhost:8888
 ```
+
+### Dataset
+The full dataset is available via Zenodo at DOI: 10.5281/zenodo.19708819.
