@@ -1,4 +1,4 @@
-# atom_based_featurization
+# Yield prediction with atomic descriptor
 
 A machine learning pipeline for predicting palladium-catalyzed cross-coupling reaction yields (`beta_av`) using atom-based molecular descriptors.
 

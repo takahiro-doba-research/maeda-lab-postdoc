@@ -1,4 +1,4 @@
-# Selectivity Prediction
+# Selectivity prediction with energy descriptor
 
 A linear regression pipeline for predicting chemical reaction selectivity (β/α ratio) using quantum-chemical energy descriptors and Ridge regression with Recursive Feature Elimination (RFE).
 

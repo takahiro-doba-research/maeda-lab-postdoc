@@ -1,4 +1,4 @@
-# Regression Model for Yield Prediction
+# Yield prediction with energy descriptor
 
 This project applies linear regression models to predict reaction yields from quantum-chemically computed energies of reaction intermediates.
 
