@@ -84,7 +84,7 @@ After cross-validation, the Ridge model is refit on the entire dataset for inter
 ## Project Structure
 
 ```
-yield_prediction/
+energy_descriptor/
 ├── X.csv                    # Intermediate energies (features)
 ├── y.csv                    # Reaction yields (target)
 ├── dataset.ipynb            # Data preprocessing → dataset.parquet

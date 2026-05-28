@@ -14,7 +14,7 @@ This project builds predictive models on 104 reaction data points (8 MPAA × 13 
 ## Directory Structure
 
 ```
-atom_based_featurization/
+atomic_descriptor/
 ├── backbone/             # Gaussian input files (*.com) for MPAA molecules
 ├── pyridone/             # Gaussian input files (*.com) for pyridone molecules
 ├── 000_dataset.ipynb     # Feature computation and dataset construction

@@ -1,6 +1,6 @@
-# atom_based_featurization
+# Selectivity prediction with atomic descriptor
 
-A machine learning pipeline for predicting palladium-catalyzed cross-coupling reaction yields (`beta_av`) using atom-based molecular descriptors.
+A machine learning pipeline for predicting palladium-catalyzed cross-coupling reaction selectivity (β/α ratio) using atom-based molecular descriptors.
 
 ## Overview
 
@@ -14,7 +14,7 @@ This project builds predictive models on 104 reaction data points (8 MPAA × 13 
 ## Directory Structure
 
 ```
-atom_based_featurization/
+atomic_descriptor/
 ├── backbone/             # Gaussian input files (*.com) for MPAA molecules
 ├── pyridone/             # Gaussian input files (*.com) for pyridone molecules
 ├── 000_dataset.ipynb     # Feature computation and dataset construction
@@ -71,8 +71,7 @@ The following descriptors are computed for each molecule using xTB and morfeus.
 
 | Variable | Description |
 |----------|-------------|
-| `beta_av` | Reaction yield (%) |
-| `beta_av_logit` | Logit-transformed yield `log(beta_av / (100 - beta_av))` — used for model training |
+| Target | `beta_alpha` = `log(β_av / α_av)` |
 
 ## Machine Learning
 
