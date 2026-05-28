@@ -1,0 +1,13 @@
+cclib==1.8.1
+fastexcel==0.13.0
+jupyterlab==4.0.10
+matplotlib==3.10.7
+morfeus-ml==0.8.0
+networkx==3.4.2
+numpy==1.24.2
+pandas==1.5.3
+polars==1.19.0
+pyvis==0.3.1
+scikit-learn==1.5.2
+scipy==1.10.0
+seaborn==0.13.2
