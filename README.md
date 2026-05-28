@@ -13,7 +13,7 @@ Takahiro Doba (Kyoto University)
 
 ## Acknowledgments
 
-This study was supported by JST-ERATO (grant number JPMJER1903) to S.M., JSPS KAKENHI (grant number 22KJ0043) to T.D., and JSPS KAKENHI (grant number 23B203) to Y.N. and Y.H.
+This study was supported by JST-ERATO (grant number JPMJER1903) to S.M., JSPS KAKENHI (grant number 22KJ0043) to T.D., JSPS KAKENHI (grant number 23B203) to Y.N. and Y.H., and JST-FOREST (grant number JPMJFR2221) to Y.H.
 
 ---
 
@@ -24,8 +24,11 @@ This study was supported by JST-ERATO (grant number JPMJER1903) to S.M., JSPS KA
 ├── calculation/                # SC-AFIR reaction path search and energy descriptor generation
 ├── experiment/                 # Experimental yield data visualization and tabulation
 ├── yield_prediction/           # Linear regression models for yield prediction
-├── selectivity_prediction/     # Regioselectivity (β/α) prediction models
-└── atom_based_featurization/   # Atom-based descriptor featurization and yield prediction
+│   ├── energy_descriptor/
+│   └── atomic_descriptor/
+└── selectivity_prediction/     # Regioselectivity (β/α) prediction models
+    ├── energy_descriptor/
+    └── atomic_descriptor/
 ```
 
 ---
@@ -79,8 +82,9 @@ See [`experiment/README.md`](experiment/README.md) for details.
 
 Linear regression models that predict the beta product yield (`beta_av`) from quantum-chemically computed reaction intermediate energies.
 
-- **Features (X.csv)**: absolute SCF energies of 52 intermediates → converted to relative energies (each intermediate − reference state)
-- **Target (y.csv)**: `beta_av` (%) → logit-transformed for regression
+- **Features (energy descriptor)**: absolute SCF energies of 52 intermediates → converted to relative energies (each intermediate − reference state)
+- **Features (atomic descriptor)**: 86 descriptors per sample — 49 from MPAA (labeled atoms 1, 3, 7, 9) and 37 from pyridone (labeled atoms 1, 2, 3)
+- **Target**: `beta_av` (%) → logit-transformed for regression
 - **Dataset**: 104 samples (8 backbone × 13 pyridone combinations)
 
 ### Models compared
@@ -92,9 +96,9 @@ Linear regression models that predict the beta product yield (`beta_av`) from qu
 | Lasso Regression | `alpha` |
 | PLS (Partial Least Squares) | `n_components` |
 
-All models share the same framework: recursive feature elimination (RFE, from 52 down to 4 features) with nested leave-one-group-out cross-validation (LOGOCV). Ridge regression receives additional analysis including alternative data splits, a shuffled-label negative control, feature correlation analysis, and noise robustness testing.
+All models share the same framework: recursive feature elimination (RFE) with nested leave-one-group-out cross-validation (LOGOCV). Ridge regression receives additional analysis including alternative data splits, a shuffled-label negative control, feature correlation analysis, and noise robustness testing.
 
-See [`yield_prediction/README.md`](yield_prediction/README.md) for details.
+See README.md in each directory for details.
 
 ---
 
@@ -102,14 +106,15 @@ See [`yield_prediction/README.md`](yield_prediction/README.md) for details.
 
 Ridge regression pipeline for predicting the logarithmic β/α regioselectivity (`log(β_av / α_av)`) of Pd-catalyzed C–H functionalization reactions.
 
-- **Features**: 40 energy-difference descriptors per sample, computed as `ΔE = E_alpha − E_beta` (difference between α- and β-pathway intermediate energies)
+- **Features (energy descriptor)**: 40 energy-difference descriptors per sample, computed as `ΔE = E_alpha − E_beta` (difference between α- and β-pathway intermediate energies)
+- **Features (atomic descriptor)**: 86 descriptors per sample — 49 from MPAA (labeled atoms 1, 3, 7, 9) and 37 from pyridone (labeled atoms 1, 2, 3)
 - **Target**: `log(β_av / α_av)` (log ratio of experimentally measured β and α yields)
 - **Dataset**: 104 samples (8 MPAA × 13 pyridone combinations)
 - **Input files**: `energy_descriptor_alpha.csv`, `energy_descriptor_beta.csv`, `combined.xlsx`
 
 ### Methodology
 
-Ridge regression with `StandardScaler` normalization and **Recursive Feature Elimination (RFE)** (from 40 down to 4 features). Two nested LOGOCV scenarios are compared:
+Ridge regression with `StandardScaler` normalization and **Recursive Feature Elimination (RFE)**. Two nested LOGOCV scenarios are compared:
 
 | Notebooks | Cross-validation | Description |
 |-----------|-----------------|-------------|
@@ -118,39 +123,7 @@ Ridge regression with `StandardScaler` normalization and **Recursive Feature Eli
 
 Run notebooks in numerical order starting from `000_dataset.ipynb`.
 
-See [`selectivity_prediction/README.md`](selectivity_prediction/README.md) for details.
-
----
-
-## `atom_based_featurization/` — Atom-Based Descriptor Featurization
-
-Linear regression pipeline for yield prediction (`beta_av`) using atom-level and molecular-level descriptors computed by semi-empirical quantum chemistry (xTB) and the morfeus library, as an alternative to the reaction-intermediate energy descriptors used in `yield_prediction/`.
-
-- **Features**: 86 descriptors per sample — 49 from MPAA (labeled atoms 1, 3, 7, 9) and 37 from pyridone (labeled atoms 1, 2, 3)
-- **Target**: `beta_av_logit` (logit-transformed beta product yield)
-- **Dataset**: 104 samples (8 MPAA × 13 pyridone combinations)
-
-### Feature types
-
-| Category | Descriptors |
-|----------|-------------|
-| Molecular-level | HOMO/LUMO energies, ionization potential (IP), electron affinity (EA), cone angle (Pd only) |
-| Atom-level | partial charge, Fukui functions (nucleophilic/radical/electrophilic), polarizability, dipole, dispersion parameter (`p_int`), buried volume (`vbur`), Sterimol parameters (B1, B5, L) |
-
-### Methodology
-
-Ridge regression with `StandardScaler` normalization and **RFE** (from 86 down to 4 features). Hyperparameter `alpha` is tuned via an inner LOGOCV loop. Two CV settings are evaluated:
-
-| Notebooks | Outer CV | Description |
-|-----------|----------|-------------|
-| `001_fit` / `002_RMSE` / `003_coefs` | Leave-one-pyridone-out | Generalization to unseen pyridone substrates |
-| `004_fit_MPAA` / `005_RMSE_MPAA` / `006_coefs_MPAA` | Leave-one-MPAA-out | Generalization to unseen MPAA ligands |
-
-Run notebooks in order: `000_dataset.ipynb` → `001_fit` → `002_RMSE` → `003_coefs` → `004_fit_MPAA` → `005_RMSE_MPAA` → `006_coefs_MPAA`.
-
-> **Note**: Requires xTB v6.7.1 installed separately with the `xtb` binary on `PATH`.
-
-See [`atom_based_featurization/README.md`](atom_based_featurization/README.md) for details.
+See README.md in each directory for details.
 
 ---
 
