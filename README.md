@@ -141,5 +141,5 @@ All environments use Python 3.10–3.11 with `polars`, `numpy`, `matplotlib`, an
 |--------|--------------------|
 | `yield_prediction/` | `scikit-learn`, `pandas`, `seaborn` |
 | `selectivity_prediction/` | `scikit-learn`, `pandas`, `seaborn`, `fastexcel` |
-| `atom_based_featurization/` | `scikit-learn`, `morfeus-ml`, `grrmlib` (local); **xTB v6.7.1** (external binary) |
+| `atomic_descriptor/` | `scikit-learn`, `morfeus-ml`, `grrmlib` (local); **xTB v6.7.1** (external binary) |
 | `calculation/` | `grrmlib`, `networkx`, `cclib`; external **GRRM** and **Gaussian** installations |

@@ -182,4 +182,4 @@ docker compose -f docker-compose.dev.yml up
 ```
 
 ### Dataset
-The full dataset is available via Zenodo at DOI: 10.5281/zenodo.19708819.
+The full dataset is available via Zenodo at DOI: 10.5281/zenodo.19708818 (for all versions).

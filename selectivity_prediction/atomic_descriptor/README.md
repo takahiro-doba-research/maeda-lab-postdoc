@@ -27,7 +27,7 @@ atomic_descriptor/
 ├── dataset.parquet       # Combined dataset
 ├── features_backbone.parquet  # MPAA features
 ├── features_pyridone.parquet  # Pyridone features
-├── y.csv                 # Target variable (MPAA, pyridone, beta_av)
+├── combined.xlsx              # Target variable (MPAA, pyridone, beta_alpha)
 ├── requirements.txt
 └── Dockerfile
 ```
